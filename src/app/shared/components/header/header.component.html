@@ -1,0 +1,62 @@
+<mat-toolbar class="app-toolbar" color="primary">
+  <!-- Brand -->
+  <a routerLink="/dashboard" class="brand">
+    <mat-icon class="brand-icon">shield</mat-icon>
+    <span class="brand-text">Broker Platform</span>
+  </a>
+
+  <!-- Nav Desktop -->
+  <nav class="desktop-nav hide-mobile">
+    @for (item of navItems; track item.path) {
+      <a [routerLink]="item.path" routerLinkActive="active-link" class="nav-link">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+
+  <span class="spacer"></span>
+
+  <!-- User menu -->
+  <button mat-button [matMenuTriggerFor]="userMenu" class="user-btn">
+    <mat-icon>account_circle</mat-icon>
+    <span class="user-name hide-mobile">{{ user?.fullName?.split(' ')?.[0] }}</span>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu">
+    <div class="user-menu-header">
+      <strong>{{ user?.fullName }}</strong>
+      <small>{{ user?.email }}</small>
+    </div>
+    <mat-divider />
+    <button mat-menu-item routerLink="/dashboard">
+      <mat-icon>dashboard</mat-icon> Dashboard
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon> Sair
+    </button>
+  </mat-menu>
+
+  <!-- Mobile menu button -->
+  <button mat-icon-button class="mobile-menu-btn hide-desktop" (click)="mobileMenuOpen = !mobileMenuOpen">
+    <mat-icon>{{ mobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
+</mat-toolbar>
+
+<!-- Mobile drawer menu -->
+@if (mobileMenuOpen) {
+  <div class="mobile-overlay" (click)="mobileMenuOpen = false"></div>
+  <nav class="mobile-nav hide-desktop">
+    @for (item of navItems; track item.path) {
+      <a [routerLink]="item.path" routerLinkActive="active-link"
+         class="mobile-nav-link" (click)="mobileMenuOpen = false">
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </a>
+    }
+    <button mat-button class="mobile-logout" (click)="logout()">
+      <mat-icon>logout</mat-icon> Sair
+    </button>
+  </nav>
+}

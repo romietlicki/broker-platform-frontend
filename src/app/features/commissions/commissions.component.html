@@ -1,0 +1,108 @@
+<app-header />
+
+<div class="page-container">
+  <h2 class="page-title">
+    <mat-icon>payments</mat-icon>
+    Comissionamento
+  </h2>
+
+  <!-- Filtros -->
+  <mat-card class="filters-card card-elevated">
+    <div class="filters-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Mês</mat-label>
+        <mat-select [(ngModel)]="selectedMonth">
+          @for (m of months; track m.v) {
+            <mat-option [value]="m.v">{{ m.l }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ano</mat-label>
+        <mat-select [(ngModel)]="selectedYear">
+          @for (y of years; track y) {
+            <mat-option [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="load()" [disabled]="loading">
+        <mat-icon>search</mat-icon>
+        Consultar
+      </button>
+    </div>
+
+    @if (!loading && commissions.length > 0) {
+      <div class="total-commission">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span>Total do período:</span>
+        <strong>{{ totalCommissions | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+      </div>
+    }
+  </mat-card>
+
+  <!-- Tabela -->
+  <mat-card class="table-card card-elevated">
+    @if (loading) {
+      <div class="loading-center"><mat-spinner /></div>
+    } @else if (commissions.length === 0) {
+      <div class="empty-state">
+        <mat-icon>payments</mat-icon>
+        <p>Nenhum comissionamento encontrado para o período selecionado.</p>
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="commissions" class="commission-table">
+
+          <ng-container matColumnDef="insuredName">
+            <th mat-header-cell *matHeaderCellDef>Segurado</th>
+            <td mat-cell *matCellDef="let row">{{ row.insuredName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="insurer">
+            <th mat-header-cell *matHeaderCellDef>Seguradora</th>
+            <td mat-cell *matCellDef="let row">{{ row.insurer }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="productName">
+            <th mat-header-cell *matHeaderCellDef>Produto</th>
+            <td mat-cell *matCellDef="let row">{{ row.productName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="commissionAmount">
+            <th mat-header-cell *matHeaderCellDef>Comissão</th>
+            <td mat-cell *matCellDef="let row">
+              <strong>{{ row.commissionAmount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="commissionPercentage">
+            <th mat-header-cell *matHeaderCellDef>%</th>
+            <td mat-cell *matCellDef="let row">{{ row.commissionPercentage }}%</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="commission-status" [class.pago]="row.status === 'PAGO'"
+                    [class.pendente]="row.status === 'PENDENTE'">
+                {{ row.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="paymentDate">
+            <th mat-header-cell *matHeaderCellDef>Pagamento</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.paymentDate ? (row.paymentDate | date:'dd/MM/yyyy':'':'pt-BR') : '—' }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+        </table>
+      </div>
+    }
+  </mat-card>
+</div>

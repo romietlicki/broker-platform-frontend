@@ -1,0 +1,196 @@
+.dashboard {
+  padding-top: 16px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  .welcome-title {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a237e;
+  }
+
+  .welcome-sub {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 480px)  { grid-template-columns: 1fr; }
+}
+
+.kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px !important;
+  border-radius: 12px !important;
+  transition: transform 0.2s;
+
+  &:hover { transform: translateY(-2px); }
+
+  .kpi-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    padding: 10px;
+    border-radius: 12px;
+
+    &.kpi-blue   { color: #1565c0; background: #e3f2fd; }
+    &.kpi-red    { color: #c62828; background: #ffebee; }
+    &.kpi-green  { color: #2e7d32; background: #e8f5e9; }
+    &.kpi-orange { color: #e65100; background: #fff3e0; }
+  }
+
+  .kpi-label {
+    margin: 0 0 4px;
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .kpi-value {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+  }
+}
+
+.tabs-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+
+  ::ng-deep {
+    .mat-mdc-tab-body-wrapper { padding: 0; }
+    .mat-mdc-tab-labels { padding: 0 16px; }
+    .tab-icon { margin-right: 6px; vertical-align: middle; font-size: 18px; }
+  }
+}
+
+.filters-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  flex-wrap: wrap;
+
+  .search-field { flex: 1; min-width: 200px; }
+  .status-field { width: 180px; }
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: #888;
+
+  mat-icon { font-size: 56px; width: 56px; height: 56px; display: block; margin: 0 auto 12px; }
+  p { font-size: 15px; max-width: 400px; margin: 0 auto; }
+
+  &.success-empty {
+    mat-icon { color: #2e7d32; }
+    color: #2e7d32;
+  }
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.policy-table {
+  width: 100%;
+
+  .insured-name { font-weight: 500; display: block; }
+  .cpf { color: #888; font-size: 12px; }
+  .overdue-date { color: #c62828; font-weight: 600; }
+}
+
+.policy-row {
+  cursor: pointer;
+  transition: background 0.15s;
+  &:hover { background: #f5f5f5; }
+}
+
+.delinquent-row { background: #fff8f8; }
+
+.delinquency-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff3e0;
+  color: #e65100;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-left: 4px solid #e65100;
+  margin: 0 16px 8px;
+  border-radius: 0 4px 4px 0;
+}
+
+.delinquency-badge {
+  background: #c62828;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 7px;
+  font-size: 11px;
+  margin-left: 6px;
+}
+
+/* Mobile cards */
+.mobile-cards {
+  padding: 8px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-policy-card,
+.mobile-delinquency-card {
+  cursor: pointer;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+
+  .mobile-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .mobile-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: #555;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      mat-icon { font-size: 16px; width: 16px; height: 16px; color: #888; }
+    }
+  }
+}

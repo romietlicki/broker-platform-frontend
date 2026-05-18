@@ -1,0 +1,156 @@
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon>description</mat-icon>
+  Detalhes da Apólice
+  <button mat-icon-button (click)="dialogRef.close()" class="close-btn">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content class="dialog-content">
+
+  <!-- Header do Segurado -->
+  <div class="insured-header">
+    <div class="insured-avatar">
+      <mat-icon>person</mat-icon>
+    </div>
+    <div>
+      <h3 class="insured-name">{{ policy.insuredName }}</h3>
+      @if (policy.insuredCpf) {
+        <p class="insured-cpf">CPF: {{ policy.insuredCpf }}</p>
+      }
+      <span class="status-chip" [ngClass]="getStatusClass(policy.status)">{{ policy.status }}</span>
+    </div>
+  </div>
+
+  <mat-divider />
+
+  <!-- Informações Gerais -->
+  <div class="section">
+    <h4 class="section-title"><mat-icon>info</mat-icon> Informações Gerais</h4>
+    <div class="info-grid">
+
+      <div class="info-item">
+        <span class="info-label">Seguradora</span>
+        <span class="info-value">{{ policy.insurer }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Produto</span>
+        <span class="info-value">{{ policy.productName || '—' }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Nº da Proposta</span>
+        <span class="info-value code">{{ policy.externalProposalId }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Periodicidade</span>
+        <span class="info-value">{{ policy.paymentPeriodicity || '—' }}</span>
+      </div>
+
+    </div>
+  </div>
+
+  <mat-divider />
+
+  <!-- Datas de Vigência -->
+  <div class="section">
+    <h4 class="section-title"><mat-icon>calendar_month</mat-icon> Vigência e Carência</h4>
+    <div class="info-grid">
+
+      <div class="info-item">
+        <span class="info-label">Início da Vigência</span>
+        <span class="info-value">{{ policy.startDate | date:'dd/MM/yyyy':'':'pt-BR' }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Fim da Vigência</span>
+        <span class="info-value">{{ policy.endDate ? (policy.endDate | date:'dd/MM/yyyy':'':'pt-BR') : '—' }}</span>
+      </div>
+
+      @if (policy.gracePeriodDays) {
+        <div class="info-item">
+          <span class="info-label">Carência</span>
+          <span class="info-value">{{ policy.gracePeriodDays }} dias</span>
+        </div>
+      }
+
+      @if (policy.cancellationDate) {
+        <div class="info-item">
+          <span class="info-label">Data de Cancelamento</span>
+          <span class="info-value warn">{{ policy.cancellationDate | date:'dd/MM/yyyy':'':'pt-BR' }}</span>
+        </div>
+      }
+
+    </div>
+  </div>
+
+  <mat-divider />
+
+  <!-- Valores Financeiros -->
+  <div class="section">
+    <h4 class="section-title"><mat-icon>attach_money</mat-icon> Valores</h4>
+    <div class="info-grid">
+
+      <div class="info-item highlight">
+        <span class="info-label">Capital Segurado</span>
+        <span class="info-value big">
+          {{ policy.insuredCapital | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        </span>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Prêmio Total</span>
+        <span class="info-value">
+          {{ policy.premiumTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Coberturas -->
+  @if (policy.coverageDescription) {
+    <mat-divider />
+    <div class="section">
+      <h4 class="section-title"><mat-icon>security</mat-icon> Coberturas</h4>
+      <p class="coverage-text">{{ policy.coverageDescription }}</p>
+    </div>
+  }
+
+  <!-- Vencimentos Futuros -->
+  @if (nextDueDates.length > 0) {
+    <mat-divider />
+    <div class="section">
+      <h4 class="section-title"><mat-icon>event</mat-icon> Próximos Vencimentos</h4>
+      <div class="dates-chips">
+        @for (date of nextDueDates; track date) {
+          <span class="date-chip">{{ date | date:'dd/MM/yyyy':'':'pt-BR' }}</span>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Parcelas em Atraso -->
+  @if (overdueDates.length > 0) {
+    <mat-divider />
+    <div class="section">
+      <h4 class="section-title warn-text"><mat-icon>event_busy</mat-icon> Parcelas em Atraso</h4>
+      <div class="dates-chips">
+        @for (date of overdueDates; track date) {
+          <span class="date-chip overdue">{{ date | date:'dd/MM/yyyy':'':'pt-BR' }}</span>
+        }
+      </div>
+    </div>
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <span class="sync-info">
+    <mat-icon>sync</mat-icon>
+    Atualizado: {{ policy.lastSyncedAt | date:'dd/MM/yyyy HH:mm':'':'pt-BR' }}
+  </span>
+  <button mat-raised-button color="primary" (click)="dialogRef.close()">Fechar</button>
+</mat-dialog-actions>

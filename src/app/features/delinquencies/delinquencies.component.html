@@ -1,0 +1,116 @@
+<app-header />
+
+<div class="page-container">
+  <h2 class="page-title">
+    <mat-icon>warning</mat-icon>
+    Controle de Inadimplências
+  </h2>
+
+  @if (!loading && delinquencies.length > 0) {
+    <div class="alert-banner">
+      <mat-icon>priority_high</mat-icon>
+      <div>
+        <strong>{{ delinquencies.length }} segurado(s) com parcela(s) em atraso</strong>
+        <span> — Total em aberto: {{ totalOverdue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</span>
+      </div>
+      <button mat-icon-button (click)="load()" matTooltip="Recarregar">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  }
+
+  <mat-card class="table-card card-elevated">
+    @if (loading) {
+      <div class="loading-center"><mat-spinner /></div>
+    } @else if (delinquencies.length === 0) {
+      <div class="empty-state success-empty">
+        <mat-icon>check_circle</mat-icon>
+        <h3>Nenhuma inadimplência!</h3>
+        <p>Todos os segurados estão com seus pagamentos em dia.</p>
+      </div>
+    } @else {
+      <!-- Desktop table -->
+      <div class="table-wrapper hide-mobile">
+        <table mat-table [dataSource]="delinquencies" class="delinquency-table">
+
+          <ng-container matColumnDef="insuredName">
+            <th mat-header-cell *matHeaderCellDef>Segurado</th>
+            <td mat-cell *matCellDef="let row">
+              <strong>{{ row.insuredName }}</strong>
+              @if (row.insuredCpf) { <small class="cpf">{{ row.insuredCpf }}</small> }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="overdueDate">
+            <th mat-header-cell *matHeaderCellDef>Data Vencimento</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="overdue-date">
+                <mat-icon>event_busy</mat-icon>
+                {{ row.overdueDate | date:'dd/MM/yyyy':'':'pt-BR' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="premiumTotal">
+            <th mat-header-cell *matHeaderCellDef>Valor da Parcela</th>
+            <td mat-cell *matCellDef="let row">
+              <strong>{{ row.premiumTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="insuredCapital">
+            <th mat-header-cell *matHeaderCellDef>Capital Segurado</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.insuredCapital | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="insurer">
+            <th mat-header-cell *matHeaderCellDef>Seguradora</th>
+            <td mat-cell *matCellDef="let row">{{ row.insurer }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="status-chip status-inadimplente">{{ row.status }}</span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-row *matRowDef="let row; columns: columns;" class="delinquent-row"></tr>
+        </table>
+      </div>
+
+      <!-- Mobile cards -->
+      <div class="mobile-cards hide-desktop">
+        @for (d of delinquencies; track d.policyId) {
+          <mat-card class="delinquency-card">
+            <div class="card-header">
+              <strong>{{ d.insuredName }}</strong>
+              <span class="status-chip status-inadimplente">Em atraso</span>
+            </div>
+            <div class="card-details">
+              <div class="detail-item">
+                <mat-icon>event_busy</mat-icon>
+                <span>Venc: <strong>{{ d.overdueDate | date:'dd/MM/yyyy':'':'pt-BR' }}</strong></span>
+              </div>
+              <div class="detail-item">
+                <mat-icon>payments</mat-icon>
+                <span>Parcela: <strong>{{ d.premiumTotal | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong></span>
+              </div>
+              <div class="detail-item">
+                <mat-icon>security</mat-icon>
+                <span>Capital: <strong>{{ d.insuredCapital | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong></span>
+              </div>
+              <div class="detail-item">
+                <mat-icon>business</mat-icon>
+                <span>{{ d.insurer }}</span>
+              </div>
+            </div>
+          </mat-card>
+        }
+      </div>
+    }
+  </mat-card>
+</div>

@@ -1,0 +1,153 @@
+<div class="auth-container">
+  <div class="auth-brand">
+    <mat-icon class="brand-icon">shield</mat-icon>
+    <h1 class="brand-title">Broker Platform</h1>
+    <p class="brand-subtitle">Criar nova conta</p>
+  </div>
+
+  <mat-card class="auth-card card-elevated">
+    <mat-card-header>
+      <mat-card-title>Cadastro de Corretor</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-stepper orientation="vertical" linear>
+
+        <!-- STEP 1: Dados Pessoais -->
+        <mat-step [stepControl]="personalForm" label="Dados Pessoais">
+          <form [formGroup]="personalForm" class="step-form">
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nome Completo *</mat-label>
+              <input matInput formControlName="fullName" placeholder="João da Silva">
+              <mat-icon matPrefix>person</mat-icon>
+              @if (personalForm.get('fullName')?.hasError('required') && personalForm.get('fullName')?.touched) {
+                <mat-error>Nome obrigatório</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>CPF</mat-label>
+              <input matInput formControlName="cpf" placeholder="000.000.000-00">
+              <mat-icon matPrefix>badge</mat-icon>
+              @if (personalForm.get('cpf')?.hasError('pattern')) {
+                <mat-error>Formato: 000.000.000-00</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Código SUSEP</mat-label>
+              <input matInput formControlName="susepCode" placeholder="Ex: 12345-C">
+              <mat-icon matPrefix>verified_user</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Telefone</mat-label>
+              <input matInput formControlName="phone" placeholder="(11) 99999-9999">
+              <mat-icon matPrefix>phone</mat-icon>
+              @if (personalForm.get('phone')?.hasError('pattern')) {
+                <mat-error>Formato: (00) 00000-0000</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="step-actions">
+              <button mat-raised-button color="primary" matStepperNext
+                      [disabled]="personalForm.invalid">
+                Próximo
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- STEP 2: Acesso -->
+        <mat-step [stepControl]="accountForm" label="Dados de Acesso">
+          <form [formGroup]="accountForm" class="step-form">
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>E-mail *</mat-label>
+              <input matInput type="email" formControlName="email" placeholder="seu@email.com">
+              <mat-icon matPrefix>email</mat-icon>
+              @if (accountForm.get('email')?.hasError('required') && accountForm.get('email')?.touched) {
+                <mat-error>E-mail obrigatório</mat-error>
+              }
+              @if (accountForm.get('email')?.hasError('email')) {
+                <mat-error>E-mail inválido</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Senha *</mat-label>
+              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+              <mat-icon matPrefix>lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (accountForm.get('password')?.hasError('minlength')) {
+                <mat-error>Mínimo 8 caracteres</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>Voltar</button>
+              <button mat-raised-button color="primary" matStepperNext
+                      [disabled]="accountForm.invalid">
+                Próximo
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!-- STEP 3: Endereço -->
+        <mat-step label="Endereço (opcional)">
+          <form [formGroup]="addressForm" class="step-form">
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Rua / Endereço</mat-label>
+              <input matInput formControlName="addressStreet">
+              <mat-icon matPrefix>home</mat-icon>
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="city-field">
+                <mat-label>Cidade</mat-label>
+                <input matInput formControlName="addressCity">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="state-field">
+                <mat-label>UF</mat-label>
+                <input matInput formControlName="addressState" maxlength="2">
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>CEP</mat-label>
+              <input matInput formControlName="addressZip" placeholder="00000-000">
+              @if (addressForm.get('addressZip')?.hasError('pattern')) {
+                <mat-error>Formato: 00000-000</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="step-actions">
+              <button mat-button matStepperPrevious>Voltar</button>
+              <button mat-raised-button color="primary" (click)="submit()"
+                      [disabled]="loading || personalForm.invalid || accountForm.invalid">
+                @if (loading) {
+                  <mat-spinner diameter="20" />
+                } @else {
+                  Criar Conta
+                }
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+      </mat-stepper>
+    </mat-card-content>
+
+    <mat-card-actions class="auth-actions">
+      <p>Já tem conta?
+        <a routerLink="/login" class="link-primary">Fazer login</a>
+      </p>
+    </mat-card-actions>
+  </mat-card>
+</div>

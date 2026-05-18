@@ -1,0 +1,67 @@
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  color: #1a237e;
+  font-size: 22px;
+  mat-icon { font-size: 28px; width: 28px; height: 28px; }
+}
+
+.filters-card {
+  margin-bottom: 24px;
+  padding: 20px !important;
+  border-radius: 12px !important;
+}
+
+.filters-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  mat-form-field { min-width: 140px; }
+}
+
+.total-commission {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  font-size: 16px;
+  color: #555;
+  mat-icon { color: #2e7d32; }
+  strong { color: #2e7d32; font-size: 20px; }
+}
+
+.table-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.table-wrapper { overflow-x: auto; }
+
+.commission-table { width: 100%; }
+
+.commission-status {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  &.pago    { background: #e8f5e9; color: #2e7d32; }
+  &.pendente { background: #fff3e0; color: #e65100; }
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px;
+  color: #888;
+  mat-icon { font-size: 48px; width: 48px; height: 48px; display: block; margin: 0 auto 12px; }
+}
